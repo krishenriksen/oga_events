@@ -108,10 +108,10 @@ int main () {
 		}
 
 		usleep(500);
-    }
+	}
 
-    libevdev_free(dev_pwrkey);
-    libevdev_free(dev_joypad);
-    close(fd_ev_pwrkey);
-    close(fd_ev_joypad);
+	libevdev_free(dev_pwrkey);
+	libevdev_free(dev_joypad);
+	close(fd_ev_pwrkey);
+	close(fd_ev_joypad);
 }
