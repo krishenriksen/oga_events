@@ -14,7 +14,7 @@ static const char* pwrkey = "/dev/input/event0";
 static const char* joypad = "/dev/input/event2";
 
 void brightness(int direction) {
-	FILE* fp = fopen("/sys/devices/platform/backlight/backlight/backlight/brightness", "w+");
+	FILE* fp = fopen("/sys/devices/platform/backlight/backlight/backlight/brightness", "r+");
 	int brightness = 0;
 
 	fscanf(fp, "%i", &brightness);
