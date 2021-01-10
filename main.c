@@ -106,6 +106,8 @@ int main () {
         if (rc_joypad == LIBEVDEV_READ_STATUS_SUCCESS) {
         	handle_event(ev_joypad.type, ev_joypad.code, ev_joypad.value);
         }
+
+        usleep(500);
     }
 
     libevdev_free(dev_pwrkey);
