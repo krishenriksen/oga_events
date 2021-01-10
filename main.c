@@ -99,15 +99,15 @@ int main () {
 		rc_pwrkey = libevdev_next_event(dev_pwrkey, LIBEVDEV_READ_FLAG_NORMAL, &ev_pwrkey);
 		rc_joypad = libevdev_next_event(dev_joypad, LIBEVDEV_READ_FLAG_NORMAL, &ev_joypad);
 
-        if (rc_pwrkey == LIBEVDEV_READ_STATUS_SUCCESS) {
-        	handle_event(ev_pwrkey.type, ev_pwrkey.code, ev_pwrkey.value);
-        }
+		if (rc_pwrkey == LIBEVDEV_READ_STATUS_SUCCESS) {
+			handle_event(ev_pwrkey.type, ev_pwrkey.code, ev_pwrkey.value);
+		}
 
-        if (rc_joypad == LIBEVDEV_READ_STATUS_SUCCESS) {
-        	handle_event(ev_joypad.type, ev_joypad.code, ev_joypad.value);
-        }
+		if (rc_joypad == LIBEVDEV_READ_STATUS_SUCCESS) {
+			handle_event(ev_joypad.type, ev_joypad.code, ev_joypad.value);
+		}
 
-        usleep(500);
+		usleep(500);
     }
 
     libevdev_free(dev_pwrkey);
