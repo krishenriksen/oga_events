@@ -86,10 +86,10 @@ int main () {
 	int rc_joypad;
 
 	fd_ev_pwrkey = open(pwrkey, O_RDONLY|O_NONBLOCK);
-    rc_pwrkey = libevdev_new_from_fd(fd_ev_pwrkey, &dev_pwrkey);
+	rc_pwrkey = libevdev_new_from_fd(fd_ev_pwrkey, &dev_pwrkey);
 
 	fd_ev_joypad = open(joypad, O_RDONLY|O_NONBLOCK);
-    rc_joypad = libevdev_new_from_fd(fd_ev_joypad, &dev_joypad);
+	rc_joypad = libevdev_new_from_fd(fd_ev_joypad, &dev_joypad);
 
 	struct input_event ev_pwrkey;
 	struct input_event ev_joypad;
