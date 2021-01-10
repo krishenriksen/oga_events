@@ -10,8 +10,15 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-static const char* pwrkey = "/dev/input/event0";
-static const char* joypad = "/dev/input/event2";
+struct libevdev* dev_pwrkey;
+int fd_ev_pwrkey;
+int rc_pwrkey;
+struct input_event ev_pwrkey;
+
+struct libevdev* dev_joypad;
+int fd_ev_joypad;
+int rc_joypad;
+struct input_event ev_joypad;
 
 void brightness(int direction) {
 	FILE* fp = fopen("/sys/devices/platform/backlight/backlight/backlight/brightness", "r+");
@@ -77,41 +84,32 @@ void handle_event(int type, int code, int value) {
 }
 
 int main () {
-	struct libevdev* dev_pwrkey;
-	int fd_ev_pwrkey;
-	int rc_pwrkey;
-
-	struct libevdev* dev_joypad;
-	int fd_ev_joypad;
-	int rc_joypad;
-
-	fd_ev_pwrkey = open(pwrkey, O_RDONLY|O_NONBLOCK);
+	fd_ev_pwrkey = open("/dev/input/event0", O_RDONLY|O_NONBLOCK);
 	rc_pwrkey = libevdev_new_from_fd(fd_ev_pwrkey, &dev_pwrkey);
 
-	fd_ev_joypad = open(joypad, O_RDONLY|O_NONBLOCK);
+	fd_ev_joypad = open("/dev/input/event2", O_RDONLY|O_NONBLOCK);
 	rc_joypad = libevdev_new_from_fd(fd_ev_joypad, &dev_joypad);
 
-	struct input_event ev_pwrkey;
-	struct input_event ev_joypad;
-
-	int quit = 0;
-	while (!quit) {
+	do {
 		rc_pwrkey = libevdev_next_event(dev_pwrkey, LIBEVDEV_READ_FLAG_NORMAL, &ev_pwrkey);
-		rc_joypad = libevdev_next_event(dev_joypad, LIBEVDEV_READ_FLAG_NORMAL, &ev_joypad);
 
 		if (rc_pwrkey == LIBEVDEV_READ_STATUS_SUCCESS) {
 			handle_event(ev_pwrkey.type, ev_pwrkey.code, ev_pwrkey.value);
 		}
+
+		rc_joypad = libevdev_next_event(dev_joypad, LIBEVDEV_READ_FLAG_NORMAL, &ev_joypad);
 
 		if (rc_joypad == LIBEVDEV_READ_STATUS_SUCCESS) {
 			handle_event(ev_joypad.type, ev_joypad.code, ev_joypad.value);
 		}
 
 		usleep(500);
-	}
+	} while (rc_pwrkey == LIBEVDEV_READ_STATUS_SYNC || rc_pwrkey == LIBEVDEV_READ_STATUS_SUCCESS || rc_pwrkey == -EAGAIN);
 
 	libevdev_free(dev_pwrkey);
 	libevdev_free(dev_joypad);
 	close(fd_ev_pwrkey);
 	close(fd_ev_joypad);
+
+	return 0;
 }

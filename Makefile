@@ -2,7 +2,7 @@ CC = gcc
 CCFLAGS = -W -Wall
 
 BINARY = oga_events
-LIBRARIES = -levdev
+LIBRARIES = -levdev -lpthread
 SOURCES = "main.c"
 
 all:
